@@ -29,5 +29,16 @@ namespace Coirius.Orm.Test
             Assert.AreEqual("((Test = N'Test') AND (Test = N'test'))", expr.ToString());
             Assert.AreNotEqual("((Test = N'Test')) AND ((Test = N'test'))", expr.ToString());
         }
+
+        [TestMethod]
+        public void OrExpressionTest()
+        {
+            OrmColumn column = new OrmColumn { Name = "Test" };
+            EqualExpression expr1 = new EqualExpression(column, "Test");
+            EqualExpression expr2 = new EqualExpression(column, "test");
+            OrExpression expr = new OrExpression(expr1, expr2);
+            Assert.AreEqual("((Test = N'Test') OR (Test = N'test'))", expr.ToString());
+            Assert.AreNotEqual("((Test = N'Test')) OR ((Test = N'test'))", expr.ToString());
+        }
     }
 }

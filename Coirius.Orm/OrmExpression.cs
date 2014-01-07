@@ -35,7 +35,24 @@ namespace Coirius.Orm
 
         public override string ToString()
         {
-            return string.Format("({0} AND {1})", this.expr1.ToString(), this.expr2.ToString());
+            return string.Format("({0} AND {1})", this.expr1, this.expr2);
+        }
+    }
+
+    public class OrExpression : OrmExpression
+    {
+        private OrmExpression expr1;
+        private OrmExpression expr2;
+
+        public OrExpression(OrmExpression expr1, OrmExpression expr2)
+        {
+            this.expr1 = expr1;
+            this.expr2 = expr2;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0} OR {1})", this.expr1, this.expr2);
         }
     }
 }
