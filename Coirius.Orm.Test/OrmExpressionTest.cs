@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Coirius.Orm.Test
 {
@@ -39,6 +38,26 @@ namespace Coirius.Orm.Test
             OrExpression expr = new OrExpression(expr1, expr2);
             Assert.AreEqual("((Test = N'Test') OR (Test = N'test'))", expr.ToString());
             Assert.AreNotEqual("((Test = N'Test')) OR ((Test = N'test'))", expr.ToString());
+        }
+
+        [TestMethod]
+        public void ComplexExpressionTest()
+        {
+            OrmColumn column = new OrmColumn { Name = "Test" };
+            EqualExpression expr1 = new EqualExpression(column, "Test");
+            EqualExpression expr2 = new EqualExpression(column, "test");
+
+            AndExpression exprAnd = new AndExpression(expr1, expr2);
+            Assert.AreEqual("((Test = N'Test') AND (Test = N'test'))", exprAnd.ToString());
+            Assert.AreNotEqual("((Test = N'Test')) AND ((Test = N'test'))", exprAnd.ToString());
+
+            OrExpression exprOr = new OrExpression(expr1, expr2);
+            Assert.AreEqual("((Test = N'Test') OR (Test = N'test'))", exprOr.ToString());
+            Assert.AreNotEqual("((Test = N'Test')) OR ((Test = N'test'))", exprOr.ToString());
+
+            OrExpression exprOrComplex = new OrExpression(exprOr, exprAnd);
+            Assert.AreEqual("(((Test = N'Test') OR (Test = N'test')) OR ((Test = N'Test') AND (Test = N'test')))", exprOrComplex.ToString());
+            Assert.AreNotEqual("(((Test = N'Test') OR (Test = N'test'))) OR (((Test = N'Test') AND (Test = N'test')))", exprOrComplex.ToString());
         }
     }
 }
