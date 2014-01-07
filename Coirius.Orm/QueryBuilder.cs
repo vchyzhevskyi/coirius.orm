@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Coirius.Orm
 {
-    internal class QueryBuilder<T> : AbstractQueryBuilder, IQueryBuilder<T>
+    public class QueryBuilder : AbstractQueryBuilder, IQueryBuilder
     {
-        public IQueryBuilder<T> Select(params string[] columnNames)
+        public IQueryBuilder Select(params string[] columnNames)
         {
             if (columnNames == null || columnNames.Length == 0)
             {
@@ -26,6 +26,7 @@ namespace Coirius.Orm
             {
                 query.AppendFormat("{0},", columnName);
             }
+
             if (columnNames.Length > 0)
             {
                 query.Length--;
@@ -33,13 +34,8 @@ namespace Coirius.Orm
             return this;
         }
 
-        public IQueryBuilder<T> Where(OrmExpression expr)
+        public IQueryBuilder Where(OrmExpression expr)
         {
-            if (query.Length > 0)
-            {
-                query.Length--;
-            }
-
             query.Append(" WHERE ");
             query.AppendFormat("{0};", expr);
             return this;
