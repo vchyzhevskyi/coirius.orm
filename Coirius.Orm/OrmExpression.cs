@@ -18,7 +18,7 @@ namespace Coirius.Orm
 
         public override string ToString()
         {
-            return string.Format("({0} = {1})", column.Name, this.value);
+            return string.Format("({0} = {1})", column.Name, this.value is string ? string.Format("N'{0}'", this.value) : this.value);
         }
     }
 
@@ -35,7 +35,7 @@ namespace Coirius.Orm
 
         public override string ToString()
         {
-            return string.Format("({0}) AND ({1})", this.expr1.ToString(), this.expr2.ToString());
+            return string.Format("({0} AND {1})", this.expr1.ToString(), this.expr2.ToString());
         }
     }
 }
