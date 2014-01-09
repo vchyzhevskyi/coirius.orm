@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Coirius.Orm
 {
     public class OrmColumn
@@ -13,6 +9,14 @@ namespace Coirius.Orm
         {
             get { return this.name; }
             set { this.name = value; }
+        }
+
+        private DbType type;
+
+        internal DbType Type
+        {
+            get { return type; }
+            set { type = value; }
         }
     }
 }
