@@ -21,7 +21,7 @@ namespace Coirius.Orm
             {
                 query.Length--;
             }
-            else if(query.Length == 7)
+            else if (query.Length == 7)
             {
                 query.Append("*");
             }
@@ -36,6 +36,19 @@ namespace Coirius.Orm
         {
             query.Append(" WHERE ");
             query.AppendFormat("{0};", expr);
+            return this;
+        }
+
+        public IQueryBuilder OrderBy(string columnName, OrmOrderBy by)
+        {
+            if (query.ToString().EndsWith(";"))
+            {
+                query.Length--;
+            }
+
+            query.Append(" ORDER BY ");
+            query.AppendFormat("{0} {1};", columnName, by.ToString().ToUpperInvariant());
+
             return this;
         }
     }

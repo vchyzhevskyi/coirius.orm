@@ -1,7 +1,7 @@
 ﻿
 namespace Coirius.Orm
 {
-    internal enum OrmOrderBy
+    public enum OrmOrderBy
     {
         Asc,
         Desc
