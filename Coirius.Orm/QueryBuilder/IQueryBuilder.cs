@@ -6,5 +6,6 @@ namespace Coirius.Orm
         IQueryBuilder Select(params string[] columnNames);
         IQueryBuilder Where(OrmExpression expr);
         IQueryBuilder OrderBy(string columnName, OrmOrderBy by);
+        IQueryBuilder Take(int count);
     }
 }

@@ -59,5 +59,12 @@ namespace Coirius.Orm
 
             return this;
         }
+
+        public IQueryBuilder Take(int count)
+        {
+            int index = 7; // query.ToString().IndexOf("SELECT ");
+            query.Insert(index, string.Format("TOP {0} ", count));
+            return this;
+        }
     }
 }
