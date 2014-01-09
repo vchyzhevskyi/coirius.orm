@@ -44,9 +44,17 @@ namespace Coirius.Orm
             if (query.ToString().EndsWith(";"))
             {
                 query.Length--;
+
+                if (query.ToString().Contains("ORDER BY"))
+                {
+                    query.Append(",");
+                }
             }
 
-            query.Append(" ORDER BY ");
+            if (!query.ToString().Contains("ORDER BY"))
+            {
+                query.Append(" ORDER BY ");
+            }
             query.AppendFormat("{0} {1};", columnName, by.ToString().ToUpperInvariant());
 
             return this;
