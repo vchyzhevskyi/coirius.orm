@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace Coirius.Orm
 {
-    public sealed class Context : IDisposable
+    public class Context : IDisposable
     {
         private SqlConnection connection;
         private string connectionString;
@@ -14,6 +14,7 @@ namespace Coirius.Orm
         {
             get { return this.connectionString; }
         }
+
         protected SqlConnection Connection
         {
             get { return this.connection; }
@@ -39,12 +40,18 @@ namespace Coirius.Orm
             }
         }
 
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            if (this.connection != null)
+            if (disposing)
             {
+                this.connection.Close();
                 this.connection.Dispose();
             }
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
         }
     }
 }

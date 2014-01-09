@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Coirius.Orm.Exceptions;
 
 namespace Coirius.Orm
 {
@@ -11,11 +6,6 @@ namespace Coirius.Orm
     {
         public IQueryBuilder Select(params string[] columnNames)
         {
-            if (columnNames == null || columnNames.Length == 0)
-            {
-                throw new Exception(); // todo change this
-            }
-
             if (query.Length > 0)
             {
                 query.Length--;
@@ -27,9 +17,13 @@ namespace Coirius.Orm
                 query.AppendFormat("{0},", columnName);
             }
 
-            if (columnNames.Length > 0)
+            if (columnNames.Length > 7)
             {
                 query.Length--;
+            }
+            else
+            {
+                query.Append("*");
             }
             return this;
         }
