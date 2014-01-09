@@ -1,4 +1,4 @@
-﻿using Coirius.Orm.Exceptions;
+﻿using System;
 
 namespace Coirius.Orm
 {
@@ -17,13 +17,17 @@ namespace Coirius.Orm
                 query.AppendFormat("{0},", columnName);
             }
 
-            if (columnNames.Length > 7)
+            if (query.Length > 7)
             {
                 query.Length--;
             }
-            else
+            else if(query.Length == 7)
             {
                 query.Append("*");
+            }
+            else
+            {
+                throw new Exception();
             }
             return this;
         }
