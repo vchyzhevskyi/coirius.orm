@@ -80,5 +80,41 @@ namespace Coirius.Orm.Test
             Assert.AreEqual("SELECT TOP 5 FirstColumn,SecondColumn WHERE (FirstColumn = N'Test') ORDER BY FirstColumn ASC;", queryBuilder.Query);
             Assert.AreNotEqual("SELECT TOP 5 FirstColumn,SecondColumn WHERE (FirstColumn = N'Test') ORDER BY SecondColumn ASC;", queryBuilder.Query);
         }
+
+        [TestMethod]
+        public void FromTest()
+        {
+            QueryBuilder queryBuilder = new QueryBuilder();
+            IQueryBuilder builder = queryBuilder as IQueryBuilder;
+            Assert.AreEqual(string.Empty, queryBuilder.Query);
+
+            builder = builder.Select("FirstColumn", "SecondColumn");
+            Assert.AreEqual("SELECT FirstColumn,SecondColumn", queryBuilder.Query);
+            Assert.AreNotEqual("SELECT FirstColumn,SecondColumn,", queryBuilder.Query);
+
+            builder = builder.Where(new EqualExpression(new OrmColumn { Name = "FirstColumn" }, "Test"));
+            Assert.AreEqual("SELECT FirstColumn,SecondColumn WHERE (FirstColumn = N'Test');", queryBuilder.Query);
+            Assert.AreNotEqual("SELECT FirstColumn,SecondColumn WHERE (FirstColumn = N'Test')", queryBuilder.Query);
+
+            builder = builder.From("TestTable");
+            Assert.AreEqual("SELECT FirstColumn,SecondColumn FROM TestTable WHERE (FirstColumn = N'Test');", queryBuilder.Query);
+            Assert.AreNotEqual("SELECT FirstColumn,SecondColumn FROM TestTable WHERE (FirstColumn = N'Test')", queryBuilder.Query);
+
+            queryBuilder = new QueryBuilder();
+            builder = queryBuilder as IQueryBuilder;
+            Assert.AreEqual(string.Empty, queryBuilder.Query);
+
+            builder = builder.From("TestTable");
+            Assert.AreEqual("SELECT * FROM TestTable;", queryBuilder.Query);
+            Assert.AreNotEqual("SELECT FirstColumn,SecondColumn FROM TestTable", queryBuilder.Query);
+
+            builder = builder.Select("FirstColumn", "SecondColumn");
+            Assert.AreEqual("SELECT FirstColumn,SecondColumn FROM TestTable;", queryBuilder.Query);
+            Assert.AreNotEqual("SELECT FirstColumn,SecondColumn, FROM TestTable;", queryBuilder.Query);
+
+            builder = builder.Where(new EqualExpression(new OrmColumn { Name = "FirstColumn" }, "Test"));
+            Assert.AreEqual("SELECT FirstColumn,SecondColumn FROM TestTable WHERE (FirstColumn = N'Test');", queryBuilder.Query);
+            Assert.AreNotEqual("SELECT FirstColumn,SecondColumn FROM TestTable; WHERE (FirstColumn = N'Test')", queryBuilder.Query);
+        }
     }
 }

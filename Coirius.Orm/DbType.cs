@@ -6,6 +6,7 @@ namespace Coirius.Orm
         Boolean,
         String,
         ByteArray,
-        Xml
+        Xml,
+        Unknown
     }
 }

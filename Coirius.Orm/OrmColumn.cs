@@ -18,5 +18,13 @@ namespace Coirius.Orm
             get { return type; }
             set { type = value; }
         }
+
+        private object value;
+
+        public object Value
+        {
+            get { return this.value; }
+            set { this.value = value; }
+        }
     }
 }

@@ -2,7 +2,12 @@
 
 namespace Coirius.Orm
 {
-    public class AbstractQueryBuilder
+#if DEBUG
+    public
+#else
+    internal
+#endif
+ class AbstractQueryBuilder
     {
         protected StringBuilder query;
 

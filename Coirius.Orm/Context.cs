@@ -1,5 +1,6 @@
 ﻿using Coirius.Orm.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Coirius.Orm
@@ -25,6 +26,7 @@ namespace Coirius.Orm
         {
             this.connectionString = connectionString;
             this.connection = new SqlConnection(this.ConnectionString);
+            this.connection.Open();
         }
 
         /// <summary>
@@ -38,6 +40,50 @@ namespace Coirius.Orm
             {
                 throw new OrmConnectionConfigurationException();
             }
+        }
+
+        /// <summary>
+        /// Executes scalar query on context
+        /// </summary>
+        /// <param name="query">An instance of IQueryBuilder</param>
+        /// <returns></returns>
+        public OrmDataEntry ExecScalar(IQueryBuilder query)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Executes query on context
+        /// </summary>
+        /// <param name="query">An instance of IQueryBuilder</param>
+        /// <returns></returns>
+        public OrmDataEntry[] Exec(IQueryBuilder query)
+        {
+            SqlDataReader reader = null;
+            SqlCommand command = null;
+            try
+            {
+                command = new SqlCommand(query.ToString(), this.connection);
+                reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    List<OrmDataEntry> result = new List<OrmDataEntry>();
+                    while (reader.Read())
+                    {
+                        result.Add(reader.GetOrmDataEntry());
+                    }
+                    return result.ToArray();
+                }
+            }
+            finally
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+            }
+            return null;
         }
 
         protected virtual void Dispose(bool disposing)
