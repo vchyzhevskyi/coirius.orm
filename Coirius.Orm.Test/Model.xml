@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Model ConnectionString="Data Source=.\MSSQL;Intial Catalog=Coirius.Orm;User ID=sa;Password=s@password;Integrated Security=True;">
+  <DataEntity Name="User" TableName="Users">
+    <Property Name="Id" Type="Int" PrimaryKey="True" />
+    <Property Name="Name" Type="String" AllowNulls="False" />
+  </DataEntity>
+</Model>

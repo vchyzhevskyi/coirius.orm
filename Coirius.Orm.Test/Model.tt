@@ -1,0 +1,64 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	IServiceProvider serviceProvider = this.Host as IServiceProvider;
+	DTE dte = serviceProvider.GetService(typeof(DTE)) as DTE;
+
+	XDocument model = XDocument.Load(this.Host.ResolvePath("Model.xml"));
+	IEnumerable<XElement> entities = model.Descendants("DataEntity");
+	string defaultNamespace = ((dte.ActiveSolutionProjects as Array).GetValue(0) as EnvDTE.Project)
+								.Properties.Item("DefaultNamespace").Value.ToString();
+#>
+using System.Linq;
+
+namespace <#= defaultNamespace #>.Models
+{
+<#
+	foreach(XElement entity in entities) {
+		IEnumerable<XElement> properties = entity.Descendants("Property");
+
+		string entityName = entity.Attribute("Name").Value;
+		string entityTableName = entity.Attribute("TableName").Value;
+#>
+	[OrmDataEntry(Name = "<#= entityName #>", TableName = "<#= entityTableName #>")]
+	public class <#= entityName #> : OrmDataEntry
+	{
+		private bool changed = false;
+<#
+		foreach(XElement property in properties) {
+			string propertyType = property.Attribute("Type").Value;
+			string propertyTypeLower = propertyType.ToLowerInvariant();
+			string propertyName = property.Attribute("Name").Value;
+#>
+
+		public <#= propertyTypeLower #> <#= propertyName #>
+		{
+			get
+			{
+				return (<#= propertyTypeLower #>)this.Columns.FirstOrDefault(x => x.Name == "<#= propertyName #>").Value;
+			}
+			set
+			{
+				OrmColumn column = this.Columns.FirstOrDefault(x => x.Name == "<#= propertyName #>");
+				column.Value = value;
+				this.changed = true;
+			}
+		}
+<#
+		}
+#>
+	}
+<#
+	}
+#>
+}

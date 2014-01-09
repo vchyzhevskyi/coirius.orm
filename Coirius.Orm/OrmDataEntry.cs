@@ -5,7 +5,7 @@ namespace Coirius.Orm
     {
         private OrmColumn[] columns;
 
-        public OrmColumn[] Columns
+        protected OrmColumn[] Columns
         {
             get { return columns; }
             internal set { columns = value; }

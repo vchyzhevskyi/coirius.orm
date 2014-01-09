@@ -43,6 +43,7 @@
     <Compile Include="DbType.cs" />
     <Compile Include="OrmDataEntry.cs" />
     <Compile Include="OrmHelper.cs" />
+    <Compile Include="OrmTableAttribute.cs" />
     <Compile Include="QueryBuilder\AbstractQueryBuilder.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Exceptions\OrmConnectionConfigurationException.cs" />
