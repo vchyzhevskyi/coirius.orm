@@ -8,5 +8,7 @@ namespace Coirius.Orm
         IQueryBuilder Where(OrmExpression expr);
         IQueryBuilder OrderBy(string columnName, OrmOrderBy by);
         IQueryBuilder Take(int count);
+
+        string ToString();
     }
 }

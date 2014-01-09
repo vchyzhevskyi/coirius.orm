@@ -130,5 +130,10 @@ namespace Coirius.Orm
             }
             return this;
         }
+
+        string IQueryBuilder.ToString()
+        {
+            return this.query.ToString();
+        }
     }
 }
