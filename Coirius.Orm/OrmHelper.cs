@@ -1,10 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Coirius.Orm
 {
     static class OrmHelper
     {
+        internal static Dictionary<string, DbType> TypeMap = new Dictionary<string, DbType>()
+        {
+            {"Int32", DbType.Int},
+            {"String", DbType.String},
+            {"Xml", DbType.Xml}
+        };
+
         internal static OrmDataEntry GetOrmDataEntry(this SqlDataReader reader)
         {
             OrmDataEntry result = new OrmDataEntry();
@@ -25,13 +34,14 @@ namespace Coirius.Orm
 
         internal static DbType GetDbType(this SqlDataReader reader, int i)
         {
-            // todo debug this and extend switch
-            switch (reader.GetFieldType(i).Name)
+            try
             {
-                default:
-                    break;
+                return OrmHelper.TypeMap.FirstOrDefault(x => x.Key == reader.GetFieldType(i).Name).Value;
             }
-            return DbType.Unknown;
+            catch (NullReferenceException)
+            {
+                return DbType.Unknown;
+            }
         }
     }
 }

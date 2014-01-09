@@ -7,6 +7,7 @@ namespace Coirius.Orm
         String,
         ByteArray,
         Xml,
-        Unknown
+        Unknown,
+        Int
     }
 }
